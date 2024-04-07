@@ -7,8 +7,14 @@
   "scripts": {
     "build": "tsc --build",
     "start": "node dist/server.js",
-    "dev": "tsc --watch & nodemon dist/server.js",
+    "dev": "nodemon --exec \"node --loader ts-node/esm src/server.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,json"
   },
   "keywords": [],
   "author": "",
