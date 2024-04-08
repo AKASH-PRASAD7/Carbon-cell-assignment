@@ -44,7 +44,7 @@ const options = {
 
     servers: [
       {
-        url: `http://${HOSTNAME}:${PORT}`,
+        url: DEPLOYED_URL,
       },
     ],
   },
