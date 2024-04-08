@@ -1,5 +1,8 @@
-import express, { Express, Request, Response, Application } from "express";
+import express, { Request, Response, Application } from "express";
+import dbConnect from "./utils/dbConnect.js";
 import swaggerJsdoc from "swagger-jsdoc";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import swaggerui from "swagger-ui-express";
 import { PORT, HOSTNAME } from "./config/config.js";
 import auth from "./routes/auth.js";
@@ -9,6 +12,20 @@ const app: Application = express();
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((err: any, req: Request, res: Response, next: any) => {
+  if (err instanceof SyntaxError && "body" in err) {
+    return res.status(400).send({ message: "Invalid JSON" });
+  }
+  next();
+});
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 //Swagger
 const options = {
@@ -17,9 +34,16 @@ const options = {
     info: {
       title: "Test Api",
       version: "1.0.0",
+      description: "Test API",
     },
+
+    servers: [
+      {
+        url: `http://${HOSTNAME}:${PORT}`,
+      },
+    ],
   },
-  apis: ["./src/routes*.ts"],
+  apis: ["./src/routes/*.ts"],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
@@ -28,12 +52,18 @@ const openapiSpecification = swaggerJsdoc(options);
 app.use("/api-docs", swaggerui.serve, swaggerui.setup(openapiSpecification));
 
 //routes
-app.use("/auth", auth);
+app.use("/api/auth", auth);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to Express & TypeScript Server");
+  res.send("Server is Fire");
+});
+
+//Not Found
+app.use((req: Request, res: Response) => {
+  res.status(404).send("404 Not Found");
 });
 
 app.listen(PORT, () => {
+  dbConnect();
   console.log(`Server is Fire at http://${HOSTNAME}:${PORT}`);
 });

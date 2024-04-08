@@ -6,11 +6,7 @@ import { generateJwtToken, IUser } from "../utils/genrateToken.js";
 export const signUp = async (req: Request, res: Response) => {
   try {
     const { fullName, email, password } = req.body;
-    if (!fullName || !email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
+
     //check if user already exist
     const user = await User.findOne({ email });
     if (user) {
@@ -61,11 +57,7 @@ export const signUp = async (req: Request, res: Response) => {
 export const signIn = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
+
     //check if user exist
     const user = await User.findOne({ email });
     if (!user) {
