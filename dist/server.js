@@ -21,7 +21,7 @@ app.use((err, req, res, next) => {
     next();
 });
 app.use(cors({
-    origin: "*",
+    origin: "https://carbon-cell-assignment-k9u4.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
@@ -37,7 +37,7 @@ const options = {
         },
         servers: [
             {
-                url: `http://${HOSTNAME}:${PORT}`,
+                url: "https://carbon-cell-assignment-k9u4.onrender.com",
             },
         ],
     },
