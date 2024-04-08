@@ -1,4 +1,5 @@
 # Sample Node.js, Express Typescript Backend Application
+https://carbon-cell-assignment-k9u4.onrender.com/api-docs/
 
 ## Overview
 
@@ -11,7 +12,7 @@ This project implements a Node.js backend application that fulfills the requirem
    - JWT authentication for securing sensitive routes.
 2. **API Endpoints for Data Retrieval:**
 
-   - API routes to fetch data from the [public API](https://api.publicapis.org/entries).
+   - API routes to fetch data from the [public API]([https://api.publicapis.org/entrie](https://carbon-cell-assignment-k9u4.onrender.com/api-docs/)s).
    - Filtering options based on categories and result limits.
 
 3. **Swagger Documentation:**
