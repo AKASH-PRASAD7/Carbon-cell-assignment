@@ -9,6 +9,7 @@ import { PORT, HOSTNAME } from "./config/config.js";
 import auth from "./routes/auth.js";
 import product from "./routes/product.js";
 import web3 from "./routes/web3.js";
+import { DEPLOYED_URL } from "./config/config.js";
 
 const app: Application = express();
 
@@ -24,7 +25,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 });
 app.use(
   cors({
-    origin: "*",
+    origin: DEPLOYED_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
