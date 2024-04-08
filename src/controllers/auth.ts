@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import { Request, Response } from "express";
 import { comparePassword, hashPassword } from "../utils/managePassword.js";
 import { generateJwtToken, IUser } from "../utils/genrateToken.js";
+import { customLogger } from "../middleware/logger.js";
 
 export const signUp = async (req: Request, res: Response) => {
   try {
@@ -49,7 +50,7 @@ export const signUp = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
-    console.log("Error in signUp controller ", error.message);
+    customLogger(`Error in signUp controller ${error.message}`, "red");
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -88,7 +89,7 @@ export const signIn = async (req: Request, res: Response) => {
       email: user.email,
     });
   } catch (error: any) {
-    console.log("Error in signIn controller ", error.message);
+    customLogger(`Error in signIn controller ${error.message}`, "red");
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -100,7 +101,7 @@ export const signOut = async (req: Request, res: Response) => {
       .status(200)
       .json({ success: true, message: "Sign out successfully" });
   } catch (error: any) {
-    console.log("Error in signOut controller ", error.message);
+    customLogger(`Error in signOut controller ${error.message}`, "red");
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };

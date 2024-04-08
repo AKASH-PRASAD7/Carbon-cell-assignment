@@ -1,15 +1,19 @@
-import express, { Request, Response, Application } from "express";
+import express, { Request, Response, Application, NextFunction } from "express";
 import dbConnect from "./utils/dbConnect.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import cors from "cors";
+import { customLogger, requestLoggerMiddleware } from "./middleware/logger.js";
 import cookieParser from "cookie-parser";
 import swaggerui from "swagger-ui-express";
 import { PORT, HOSTNAME } from "./config/config.js";
 import auth from "./routes/auth.js";
+import product from "./routes/product.js";
+import web3 from "./routes/web3.js";
 
 const app: Application = express();
 
-//middleware
+//middlewares
+app.use(requestLoggerMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((err: any, req: Request, res: Response, next: any) => {
@@ -53,6 +57,8 @@ app.use("/api-docs", swaggerui.serve, swaggerui.setup(openapiSpecification));
 
 //routes
 app.use("/api/auth", auth);
+app.use("/api", product);
+app.use("/api", web3);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Fire");
@@ -65,5 +71,5 @@ app.use((req: Request, res: Response) => {
 
 app.listen(PORT, () => {
   dbConnect();
-  console.log(`Server is Fire at http://${HOSTNAME}:${PORT}`);
+  customLogger(`Server is running on http://${HOSTNAME}:${PORT}`, "green");
 });
