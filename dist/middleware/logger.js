@@ -1,17 +1,10 @@
-"use strict";
-// import { Request, Response, NextFunction } from "express";
-// export function loggingHandler(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   logging.log(
-//     `Incomming - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`
-//   );
-//   res.on("finish", () => {
-//     logging.log(
-//       `Result - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}]`
-//     );
-//   });
-//   next();
-// }
+import chalk from "chalk";
+export const customLogger = (message, color = "white") => {
+    const timestamp = new Date().toISOString();
+    console.log(`${chalk[color](`[${timestamp}]`)} ${message}`);
+};
+// Request Logger Middleware
+export const requestLoggerMiddleware = (req, res, next) => {
+    customLogger(`[${req.method}] ${req.url}`, "yellow"); // Log request method and URL
+    next();
+};

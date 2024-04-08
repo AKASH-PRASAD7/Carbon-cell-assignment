@@ -10,14 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import User from "../models/user.js";
 import { comparePassword, hashPassword } from "../utils/managePassword.js";
 import { generateJwtToken } from "../utils/genrateToken.js";
+import { customLogger } from "../middleware/logger.js";
 export const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { fullName, email, password } = req.body;
-        if (!fullName || !email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: "All fields are required" });
-        }
         //check if user already exist
         const user = yield User.findOne({ email });
         if (user) {
@@ -58,18 +54,13 @@ export const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        console.log("Error in signUp controller ", error.message);
+        customLogger(`Error in signUp controller ${error.message}`, "red");
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 export const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        if (!email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: "All fields are required" });
-        }
         //check if user exist
         const user = yield User.findOne({ email });
         if (!user) {
@@ -101,7 +92,7 @@ export const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        console.log("Error in signIn controller ", error.message);
+        customLogger(`Error in signIn controller ${error.message}`, "red");
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
@@ -113,7 +104,7 @@ export const signOut = (req, res) => __awaiter(void 0, void 0, void 0, function*
             .json({ success: true, message: "Sign out successfully" });
     }
     catch (error) {
-        console.log("Error in signOut controller ", error.message);
+        customLogger(`Error in signOut controller ${error.message}`, "red");
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 });

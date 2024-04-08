@@ -7,17 +7,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from "mongoose";
-import { MONGO_URI } from "../config/config.js";
+import Web3 from "web3";
+import { INFURA_API_KEY } from "../config/config.js";
 import { customLogger } from "../middleware/logger.js";
-const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+const web3 = new Web3(`https://mainnet.infura.io/v3/${INFURA_API_KEY}`);
+export const getBlockNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose.connect(MONGO_URI);
-        customLogger("Connected to Db", "green");
+        const address = req.params.address;
+        if (!web3.utils.isAddress(address)) {
+            return res.status(400).json({ error: "Invalid Ethereum address" });
+        }
+        const balance = yield web3.eth.getBalance(address);
+        res.json({ balance: web3.utils.fromWei(balance, "ether") });
     }
     catch (error) {
-        customLogger(`Failed to connect to Db ${error.message}`, "red");
-        throw new Error(`Failed to connect to Db ${error.message}`);
+        customLogger(`Error in web3 controller ${error.message}`, "red");
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
-export default dbConnect;

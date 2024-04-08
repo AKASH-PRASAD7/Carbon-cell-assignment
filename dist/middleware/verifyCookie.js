@@ -7,17 +7,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from "mongoose";
-import { MONGO_URI } from "../config/config.js";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/config.js";
 import { customLogger } from "../middleware/logger.js";
-const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+const verifyCookie = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose.connect(MONGO_URI);
-        customLogger("Connected to Db", "green");
+        const cookie = req.cookies["token"];
+        if (!cookie) {
+            return res
+                .status(401)
+                .json({ success: false, message: "Unauthorized Please Sign In" });
+        }
+        const token = jwt.verify(cookie, JWT_SECRET);
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized Invalid Token" });
+        }
+        next();
     }
     catch (error) {
-        customLogger(`Failed to connect to Db ${error.message}`, "red");
-        throw new Error(`Failed to connect to Db ${error.message}`);
+        customLogger(`Error in verifyCookie middleware ${error.message}`, "red");
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
-export default dbConnect;
+export default verifyCookie;

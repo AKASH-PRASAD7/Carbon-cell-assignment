@@ -1,15 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import {
-  getAllProducts,
-  getProductById,
-  getProductPerPage,
-  searchProduct,
-  filterProduct,
-  getProductsByCategory,
-} from "../controllers/product.js";
+import { getAllProducts, getProductById, getProductPerPage, searchProduct, filterProduct, getProductsByCategory, } from "../controllers/product.js";
 import verifyCookie from "../middleware/verifyCookie.js";
-
 /**
  * @swagger
  * /api/products:
@@ -24,9 +16,7 @@ import verifyCookie from "../middleware/verifyCookie.js";
  *      '404':
  *        description: No products found
  */
-
 router.get("/products", getAllProducts);
-
 /**
  * @swagger
  * /api/products/page:
@@ -47,9 +37,7 @@ router.get("/products", getAllProducts);
  *      '404':
  *        description: No products found
  */
-
 router.get("/products/page", getProductPerPage);
-
 /**
  * @swagger
  * /api/products/search:
@@ -70,9 +58,7 @@ router.get("/products/page", getProductPerPage);
  *      '500':
  *        description: Server error
  */
-
 router.get("/products/search", searchProduct);
-
 /**
  * @swagger
  * /api/products/filter:
@@ -99,9 +85,7 @@ router.get("/products/search", searchProduct);
  *      '500':
  *        description: Server error
  */
-
 router.get("/products/filter", verifyCookie, filterProduct);
-
 /**
  * @swagger
  * /api/products/category/{category}:
@@ -123,9 +107,7 @@ router.get("/products/filter", verifyCookie, filterProduct);
  *       '500':
  *         description: Server error
  */
-
 router.get("/products/category/:category", verifyCookie, getProductsByCategory);
-
 /**
  * @swagger
  * /api/products/{id}:
@@ -146,7 +128,5 @@ router.get("/products/category/:category", verifyCookie, getProductsByCategory);
  *      '404':
  *        description: No product found
  */
-
 router.get("/products/:id", getProductById);
-
 export default router;

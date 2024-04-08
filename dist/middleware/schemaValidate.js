@@ -7,17 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from "mongoose";
-import { MONGO_URI } from "../config/config.js";
-import { customLogger } from "../middleware/logger.js";
-const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+const validate = (schema) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose.connect(MONGO_URI);
-        customLogger("Connected to Db", "green");
+        const parseBody = yield schema.parseAsync(req.body);
+        req.body = parseBody;
+        next();
     }
     catch (error) {
-        customLogger(`Failed to connect to Db ${error.message}`, "red");
-        throw new Error(`Failed to connect to Db ${error.message}`);
+        console.log("Error at schema validation", error.errors[0].message);
+        return res.status(400).json({ message: error.errors[0].message });
     }
 });
-export default dbConnect;
+export default validate;
