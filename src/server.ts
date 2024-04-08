@@ -25,7 +25,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 });
 app.use(
   cors({
-    origin: DEPLOYED_URL,
+    origin: "https://carbon-cell-assignment-k9u4.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -44,7 +44,7 @@ const options = {
 
     servers: [
       {
-        url: DEPLOYED_URL,
+        url: "https://carbon-cell-assignment-k9u4.onrender.com",
       },
     ],
   },
